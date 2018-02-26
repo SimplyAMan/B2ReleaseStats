@@ -1,3 +1,4 @@
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
@@ -8,36 +9,43 @@ import static org.junit.Assert.*;
  */
 public class SummaryStatisticsTest {
     @org.junit.Test
-    public void searchForStartString() throws Exception {
-        SummaryStatistics statistics = new SummaryStatistics();
-        boolean actual = statistics.searchForStartString("============== 22.01.2018 14:09:02 запуск ==============");
-        assertEquals(true,actual);
-        assertEquals("22.01.2018 14:09:02",statistics.getStart());
+    public void FileWithoutStartAndFinishData(){
+        String[] lines = {
+                "Банк - 300346 ПАТ \"АЛЬФА-БАНК\" У М.КИЄВІ\n",
+                "Версия ScriptRunner.exe - 3.4.0.1\n",
+                "Пользователь - alishnyanskiy\n",
+                "Имя компьютера - ALFA\\WD-KV-79561\n"};
+        SummaryStatistics summaryStatistics = new SummaryStatistics(lines, "test.txt");
+        assertEquals(null,summaryStatistics.getStart());
+        assertEquals(null,summaryStatistics.getFinish());
+        assertEquals(null,summaryStatistics.getDuration());
     }
     @org.junit.Test
-    public void searchForFinishString() throws Exception {
-        SummaryStatistics statistics = new SummaryStatistics();
-        boolean actual = statistics.searchForFinishString("============== 22.01.2018 14:09:02 стоп ==============");
-        assertEquals(true,actual);
-        assertEquals("22.01.2018 14:09:02",statistics.getFinish());
+    public void FileWithoutFinishData(){
+        String[] lines = {
+                "============== 22.01.2018 14:09:02 запуск ==============\n",
+                "Банк - 300346 ПАТ \"АЛЬФА-БАНК\" У М.КИЄВІ\n",
+                "Версия ScriptRunner.exe - 3.4.0.1\n",
+                "Пользователь - alishnyanskiy\n",
+                "Имя компьютера - ALFA\\WD-KV-79561\n"};
+        SummaryStatistics summaryStatistics = new SummaryStatistics(lines, "test.txt");
+        assertEquals("22.01.2018 14:09:02",summaryStatistics.getStart());
+        assertEquals(null,summaryStatistics.getFinish());
+        assertEquals(null,summaryStatistics.getDuration());
     }
     @org.junit.Test
-    public void getDuration() throws Exception {
-        SummaryStatistics statistics = new SummaryStatistics();
-        boolean isStartExists = statistics.searchForStartString("============== 22.01.2018 14:09:02 запуск " +
-                "==============");
-        boolean isFinishExists = statistics.searchForFinishString("============== 22.01.2018 14:09:04 стоп " +
-                "==============");
-        assertEquals("22.01.2018 14:09:04",statistics.getFinish());
-    }
-    @org.junit.Test
-    public void getDurationWhenFinishInAnotherDay() throws Exception {
-        SummaryStatistics statistics = new SummaryStatistics();
-        boolean isStartExists = statistics.searchForStartString("============== 22.01.2018 23:53:02 запуск " +
-                "==============");
-        boolean isFinishExists = statistics.searchForFinishString("============== 23.01.2018 00:02:04 стоп " +
-                "==============");
-        assertEquals("00 00:09:02",statistics.getDuration());
+    public void FileWithStartAndFinish(){
+        String[] lines = {
+                "============== 22.01.2018 14:09:02 запуск ==============\n",
+                "Банк - 300346 ПАТ \"АЛЬФА-БАНК\" У М.КИЄВІ\n",
+                "Версия ScriptRunner.exe - 3.4.0.1\n",
+                "Пользователь - alishnyanskiy\n",
+                "============== 22.01.2018 14:09:04 стоп ==============\n",
+                "Имя компьютера - ALFA\\WD-KV-79561\n"};
+        SummaryStatistics summaryStatistics = new SummaryStatistics(lines, "test.txt");
+        assertEquals("22.01.2018 14:09:02",summaryStatistics.getStart());
+        assertEquals("22.01.2018 14:09:04",summaryStatistics.getFinish());
+        assertEquals("00 00:00:02",summaryStatistics.getDuration());
     }
 
 }

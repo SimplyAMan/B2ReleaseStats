@@ -9,37 +9,25 @@ public class SummaryStatistics {
     private String start;
     private String finish;
     private String duration;
+    private String fileName;
 
-    public boolean searchForStartString(String line) {
-        boolean result = false;
-        Pattern pattern = Pattern.compile("============== (\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}:\\d{2}) запуск " +
-                "==============");
-        Matcher matcher = pattern.matcher(line);
-        result = matcher.find();
-        if (result) {
-            this.start = matcher.group(1);
-        }
+    public SummaryStatistics(String[] fileContent, String fileName) {
+        this.fileName = fileName;
 
-        return result;
-    }
-
-    public boolean searchForFinishString(String line) {
-        boolean result = false;
-        Pattern pattern = Pattern.compile("============== (\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}:\\d{2}) стоп " +
-                "==============");
-        Matcher matcher = pattern.matcher(line);
-        result = matcher.find();
-        if (result) {
-            this.finish = matcher.group(1);
-            int finishInInteger = DateTimeString.convertDateTimeToInt(this.finish);
-            if (this.start != null) {
+        for (int i = 0; i < fileContent.length; i++) {
+            if(this.start == null) {
+                this.start = DateTimeStatistics.searchForStartString(fileContent[i]);
+            }
+            if(this.finish == null) {
+                this.finish = DateTimeStatistics.searchForFinishString(fileContent[i]);
+            }
+            if(this.start != null && this.finish != null) {
+                int finishInInteger = DateTimeString.convertDateTimeToInt(this.finish);
                 int startInInteger = DateTimeString.convertDateTimeToInt(this.start);
                 int duration = finishInInteger - startInInteger;
                 this.duration = DateTimeString.convertIntToDateTime(duration);
             }
         }
-
-        return result;
     }
 
     public String getStart() {
@@ -52,5 +40,9 @@ public class SummaryStatistics {
 
     public String getDuration() {
         return duration;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }
