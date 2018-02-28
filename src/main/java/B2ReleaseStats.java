@@ -17,7 +17,7 @@ public class B2ReleaseStats {
         File f = new File(argc[0]);
         File[] matchingFiles = f.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.startsWith("Full_") && name.endsWith("tmp");
+                return name.startsWith("Full_") && name.endsWith("log");
             }
         });
 
@@ -38,11 +38,10 @@ public class B2ReleaseStats {
         SummaryStatistics summaryStatistics = null;
         List<String> contentOfFile = new ArrayList<>();
         try {
-            br = new BufferedReader(new InputStreamReader (new FileInputStream(fullFileName),"UTF-8"/*"Cp1251"*/));
+            br = new BufferedReader(new InputStreamReader (new FileInputStream(fullFileName),"Cp1251"));
             String line;
             while ((line = br.readLine()) != null) {
-                contentOfFile.add(line);
-//                System.out.println(line);
+                contentOfFile.add(new String(line.getBytes("UTF-8")));
             }
             summaryStatistics = new SummaryStatistics(contentOfFile.toArray(new String[contentOfFile
                     .size()]), new File(fullFileName).getName());
