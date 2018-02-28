@@ -2,10 +2,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Methods convertion numbers and strings
  * @author ahuryn
- *         Created 25.02.2018.
  */
 public class DateTimeString {
+    /**
+     * Convert number to string that consists date and time
+     *
+     * @param  dateTime number that needs to convert to string
+     * @return string that consists date and time
+     */
     public static String convertIntToDateTime(int dateTime) {
         String result = "";
 
@@ -19,6 +25,12 @@ public class DateTimeString {
         return result;
     }
 
+    /**
+     * Convert string to number of date and time
+     *
+     * @param  dateTime string that need to convert to number
+     * @return number that consist string to number
+     */
     public static int convertDateTimeToInt(String dateTime) {
         int result = 0;
         Pattern pattern = Pattern.compile("(\\d{2})\\.(\\d{2})\\.(\\d{4}) (\\d{2}):(\\d{2}):(\\d{2})");

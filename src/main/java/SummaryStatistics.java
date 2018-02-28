@@ -2,8 +2,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Class of information about file summary statistics
+ *
  * @author ahuryn
- *         Created 24.02.2018.
  */
 public class SummaryStatistics {
     private String start;
